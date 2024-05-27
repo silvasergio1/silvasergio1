@@ -1,0 +1,73 @@
+#!/bin/bash 
+
+#script criado por: Sérgio ricardo
+#data: 27/05/2024 --- script instalação para jogos
+
+atualizar_sistema () {
+  sudo apt update -y # processo de atualização
+}
+
+instalar_openssh(){
+  sudo apt install openssh-server #instala o comando openssh
+}
+
+Adicionar_arquiterura_32bits () {
+  sudo dpkg --add-architecture i386 #libera a arquiterura 32bits
+}
+
+instala_programas () { 
+sudo apt install steam steam-devices antimicro vulkan-tools mesa-utils mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers dxvk ubuntu-restricted-extras -y #instala programas necessarios 
+}
+
+#instalação do winqhq
+
+instala_repositorio() {
+sudo mkdir -pm755 /etc/apt/keyrings
+sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+}
+
+baixando_wine (){
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources
+}
+
+instalando_wine (){
+sudo apt install --install-recommends winehq-staging
+}
+
+#instalando OBS Studio 
+
+Obs_studio (){
+sudo apt-get install ffmpeg
+sudo add-apt-repository ppa:obsproject/obs-studio
+sudo apt update
+sudo apt-get update && sudo apt-get install obs-studio
+}
+
+atualiza_sistema_e_remover_arquivos(){
+sudo apt upgrade -y # faz a atualização do sistema
+sudo apt autoclean -y # faz a limpeza do sistema
+sudo apt autoremove -y # faz a limpeza de pacote
+}
+
+Lutris() {
+sudo add-apt-repository ppa:lutris-team/lutris
+sudo apt update
+sudo apt install lutris
+}
+
+Mangohud_goverlay_vkbasalt() {
+sudo add-apt-repository ppa:flexiondotorg/mangohud
+sudo apt-get update
+sudo apt install mangohud goverlay vkbasalt
+}
+
+atualizar_sistema
+instalar_openssh
+Adicionar_arquiterura_32bits
+instala_programas        
+instala_repositorio
+baixando_wine
+instalando_wine
+Obs_studio
+lutris
+Mangohud_goverlay_vkbasalt
