@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# Script para instalar programas e configurar o sistema para jogos no Linux
+# Data de Criação: 28/04/2025
+# Autor: [Seu Nome]
+
+# Atualiza o sistema
+atualizar_sistema() {
+  sudo apt update -y
+  sudo apt upgrade -y
+}
+
+# Instala o servidor OpenSSH
+instalar_openssh() {
+  sudo apt install openssh-server -y
+}
+
+# Habilita a arquitetura de 32 bits
+adicionar_arquitetura_32bits() {
+  sudo dpkg --add-architecture i386
+}
+
+# Instala programas essenciais para jogos
+instalar_programas_essenciais() {
+  sudo apt install steam steam-devices antimicro vulkan-tools mesa-utils mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers dxvk ubuntu-restricted-extras -y
+}
+
+# Instala o WineHQ 10.6
+instalar_winehq() {
+  VERSAO_WINE="10.6"
+  DISTRO=$(lsb_release -sc)
+
+  sudo mkdir -p /etc/apt/keyrings
+  sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+  echo "deb [signed-by=/etc/apt/keyrings/winehq-archive.key] https://dl.winehq.org/wine-builds/ubuntu/ ${DISTRO} main" | sudo tee /etc/apt/sources.list.d/winehq.list
+  sudo apt update -y
+  sudo apt install --install-recommends winehq-staging="10.6~${DISTRO}-1" -y
+  sudo apt install --fix-broken -y
+}
+
+# Instala o OBS Studio
+instalar_obs_studio() {
+  sudo apt-get install ffmpeg -y
+  sudo add-apt-repository ppa:obsproject/obs-studio -y
+  sudo apt update -y
+  sudo apt-get install obs-studio -y
+}
+
+# Limpa o sistema de arquivos desnecessários
+limpar_sistema() {
+  sudo apt upgrade -y
+  sudo apt autoclean -y
+  sudo apt autoremove -y
+}
+
+# Instala o Lutris
+instalar_lutris() {
+  sudo add-apt-repository ppa:lutris-team/lutris -y
+  sudo apt update -y
+  sudo apt install lutris -y
+}
+
+# Instala MangoHud, Goverlay e VkBasalt
+instalar_mangohud_goverlay_vkbasalt() {
+  sudo add-apt-repository ppa:flexiondotorg/mangohud -y
+  sudo apt update -y
+  sudo apt install mangohud goverlay vkbasalt -y
+}
+
+# Função principal para executar as instalações
+main() {
+  atualizar_sistema
+  #instalar_openssh
+  #adicionar_arquitetura_32bits
+  instalar_programas_essenciais
+  instalar_winehq
+  instalar_obs_studio
+  #instalar_lutris
+  #instalar_mangohud_goverlay_vkbasalt
+  limpar_sistema
+
+  echo "Instalação completa!"
+  echo "Por favor, reinicie o seu sistema para que as alterações tenham efeito."
+}
+
+# Verifica se o script está sendo executado como root
+if [ "$EUID" -ne 0 ]; then
+  echo "Este script precisa ser executado como root."
+  exit 1
+fi
+
+# Executa a função principal
+main
